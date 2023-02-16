@@ -27,17 +27,21 @@ async function getCategories() {
     return docs;
 }
 
-function reverseProductState(category, productName, state) {
+
+function reverseProductState({category, product, isToBuy, getData}) {
+    const reversedIsToBuy = parseInt(isToBuy) === 0 ? 1 : 0;
     const update = {
         [category]: {
             products: {
                 ...docs[category].products,
-                [productName]: state
+                [product]: reversedIsToBuy
             },
             hue: docs[category].hue
         }
     }
-    updateDoc(docRef, update);
+    updateDoc(docRef, update).then(() => {
+        getData();
+    });
 }
 
 async function resetCategories() {

@@ -15,6 +15,7 @@ const StyledCategoryList = styled.main`
   .product {
     color: #fff;
     margin: 3px 1px;
+	cursor: pointer;
   }
 
   .category {

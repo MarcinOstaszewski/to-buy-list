@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import StyledCategoryList from "./CategoryList.styled";
 
 const CategoryList = props => {
-  const { categories } = props;
+  const { categories, moveProduct } = props;
   const [productsToBuy, setProductsToBuy] = useState([]);
   const [productsWaiting , setProductsWaiting] = useState([]);
 
@@ -11,9 +11,9 @@ const CategoryList = props => {
     return products.map((product, i) => {
       const isLast = i + 1 === products.length ? ' is-last' : '';
       return (
-        <span key={`${category}-${i}`}
+        <span key={`${category.name}-${i}`}
           className={`product${isLast}`}
-          onClick={e => props.moveProduct(e)}
+          onClick={e => moveProduct(e)}
           data-category={category.name}
           data-product={product}
           data-is-to-buy={isToBuy}
@@ -25,31 +25,33 @@ const CategoryList = props => {
   }
 
   const createCategoriesList = (categoriesData, isToBuy) => {
-    return categoriesData.map((category, i) => {
+    const productsList = [];
+    categoriesData.forEach((category, i) => {
       const bgColor = `hsl(${category.hue}, 40%, 40%)`;
       const style = {backgroundColor: bgColor};
       const categoryLength = category.products.length;
       const isCategoryEmpty = categoryLength === 0 ? ' is-empty': '';
-      const categoryProducts = categoryLength ? createProductsList({category, isToBuy, style}) : '';
-      return <>
+      const categoryProducts = categoryLength ? createProductsList({category, isToBuy, style}) : [];
+      productsList.push(
         <span key={i} style={style}
           className={`category${isCategoryEmpty}`}>
           {category.name.toUpperCase()}
-        </span>
-        {categoryProducts}
-      </>
+        </span>,
+        ...categoryProducts
+      )
     });
+    return productsList;
   }
 
   const divideProductsList = (categories) => {
-    let tempToBuy = [];
-    let tempWaiting = [];
+    const tempToBuy = [];
+    const tempWaiting = [];
     Object.keys(categories).forEach(category => {
       const tempProductsToBuy = [];
       const tempProductsWaiting = [];
       const categoryData = categories[category];
       Object.keys(categories[category].products).forEach(prod => {
-        if (categoryData.products[prod]) {
+        if (parseInt(categoryData.products[prod]) === 1) {
           tempProductsToBuy.push(prod);
         } else {
           tempProductsWaiting.push(prod);
@@ -66,16 +68,14 @@ const CategoryList = props => {
         products: tempProductsWaiting
       });
     });
-
-    tempToBuy = createCategoriesList(tempToBuy, true);
-    tempWaiting = createCategoriesList(tempWaiting, false);
-    setProductsToBuy(tempToBuy);
-    setProductsWaiting(tempWaiting);
+    return [tempToBuy, tempWaiting];
   }
 
   useEffect(() => {
-    divideProductsList(categories);
-  }, []);
+    const [filteredToBuy, filteredWaiting] = divideProductsList(categories);
+    setProductsToBuy(createCategoriesList(filteredToBuy, 1));
+    setProductsWaiting(createCategoriesList(filteredWaiting, 0));
+  }, [categories]);
   
   return (
     <StyledCategoryList>

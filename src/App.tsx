@@ -4,12 +4,13 @@ import CategoryList from './components/CategoryList/CategoryList';
 import './App.css';
 
 function App() {
-  let [categories, setCategories] = useState({});
+  const [categories, setCategories] = useState({});
 
   const getData = () => {
+    console.log('getData runs');
     getCategories()
     .then(res => {
-      // console.log(res);
+      console.log(res);
       setCategories(res);
     })
   }
@@ -20,15 +21,15 @@ function App() {
 
   const moveProduct = (e: React.MouseEventHandler<HTMLSpanElement> | any) => {
     let {category, product, isToBuy} = e.target.dataset;
-    isToBuy = isToBuy ? 0 : 1;
-    // console.log(category, product, isToBuy);
-    reverseProductState(category, product, isToBuy);
-    getData();
+    reverseProductState({category, product, isToBuy, getData});
   }
   
   return (
     <div className="App">
-      <CategoryList categories={categories} moveProduct={moveProduct}/>
+      <CategoryList 
+        categories={categories} 
+        moveProduct={moveProduct}
+      />
     </div>
   );
 }
