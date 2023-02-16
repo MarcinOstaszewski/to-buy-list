@@ -1,0 +1,21 @@
+:root {
+  --default-padding: 10px;
+  --border-radius: 15px;
+  --border-radius-when-empty: 25px;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+body, button, input, select {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.App {
+  display: block;
+}
