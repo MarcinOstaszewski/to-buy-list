@@ -27,17 +27,11 @@ async function getCategories() {
     return docs;
 }
 
-
 function reverseProductState({category, product, isToBuy, getData}) {
     const reversedIsToBuy = parseInt(isToBuy) === 0 ? 1 : 0;
+    const pathToValue = `${category}.products.${product}`;
     const update = {
-        [category]: {
-            products: {
-                ...docs[category].products,
-                [product]: reversedIsToBuy
-            },
-            hue: docs[category].hue
-        }
+        [pathToValue]: reversedIsToBuy
     }
     updateDoc(docRef, update).then(() => {
         getData();
