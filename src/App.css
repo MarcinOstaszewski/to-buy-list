@@ -19,3 +19,7 @@ body, button, input, select {
 .App {
   display: block;
 }
+
+button {
+  margin-left: 24px;
+}
