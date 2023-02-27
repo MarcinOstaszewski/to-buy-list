@@ -1,47 +1,63 @@
 import { initializeApp } from 'firebase/app';
-import { collection, getFirestore, getDocs, doc, updateDoc, addDoc } from 'firebase/firestore';
-import { categoriesData } from './categoriesData';
-
-const config = {
-    apiKey: "AIzaSyB_psG_2HT8VisbjB3szsMjZsnlfQIS9ko",
-    authDomain: "what-to-buy-94750.firebaseapp.com",
-    databaseURL: "https://what-to-buy-94750.firebaseio.com",
-    projectId: "what-to-buy-94750",
-    storageBucket: "what-to-buy-94750.appspot.com",
-    messagingSenderId: "194092546135",
-    appId: "1:194092546135:web:7661e65a00a7f2aa390b12",
-    measurementId: "G-XWZR1H0ZMY"
-}
+import { getFirestore, collection, query, where, getDocs, doc, onSnapshot, updateDoc, addDoc } from 'firebase/firestore';
+import { categoriesArray } from './categoriesArray';
+import config from './firebaseConfig';
 
 const collectionName = 'categories';
 const app = initializeApp(config);
 const db = getFirestore();
 const colRef = collection(db, collectionName);
-let docRef, docs;
+const docRefs = {};
+const unsubscriptions = {}; 
 
-async function getCategories() {
+const getCategories = async (onSnapshotChange) => {
     const snapshot = await getDocs(colRef);
-    docs = snapshot.docs[0].data();
-    const docID  = snapshot.docs[0].id;
-    docRef = doc(db, collectionName, docID);
-    return docs;
+    const collectionArray = [];
+
+    snapshot.docs.forEach(document => {
+        const docRef = doc(db, collectionName, document.id);
+        const categoryName = document.data().name;
+        docRefs[categoryName] = docRef;
+        unsubscriptions[categoryName] = onSnapshot(docRef, docsSnap => {
+            onSnapshotChange(docsSnap);
+        });
+        collectionArray.push(document.data());
+    });
+    return collectionArray;
 }
 
-function reverseProductState({category, product, isToBuy, getData}) {
+const reverseProductState = ({category, product, isToBuy}) => { //, getData
     const reversedIsToBuy = parseInt(isToBuy) === 0 ? 1 : 0;
-    const pathToValue = `${category}.products.${product}`;
+    const pathToValue = `products.${product}`;
     const update = {
         [pathToValue]: reversedIsToBuy
     }
-    updateDoc(docRef, update).then(() => {
-        getData();
-    });
+    updateDoc(docRefs[category], update)
+    // .then(() => {
+    //     getData();
+    // });
 }
 
-async function resetCategories() {
-    addDoc(colRef, {
-        ...categoriesData
-    });
+const resetCategoriesArray = async () => {
+    categoriesArray.forEach(category => {
+        addDoc(colRef, {
+            ...category
+        });
+    });        
 }
 
-export { app, db, getCategories, reverseProductState, resetCategories };
+const queryCategories = async (e) => {
+    const {path, queryText} =  e.target.dataset;
+    const q = query(collection(db, "categories"), where(path, "==", queryText));
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot);
+}
+
+export { 
+    app,
+    db,
+    getCategories,
+    reverseProductState,
+    resetCategoriesArray,
+    queryCategories
+};

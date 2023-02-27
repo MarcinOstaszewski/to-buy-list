@@ -27,7 +27,7 @@ const CategoryList = props => {
   const createCategoriesList = (categoriesData, isToBuy) => {
     const productsList = [];
     categoriesData.forEach((category, i) => {
-      const bgColor = `hsl(${category.hue}, 40%, 40%)`;
+      const bgColor = `hsl(${category.hue}, 70%, 30%)`;
       const style = {backgroundColor: bgColor};
       const categoryLength = category.products.length;
       const isCategoryEmpty = categoryLength === 0 ? ' is-empty': '';
@@ -43,33 +43,33 @@ const CategoryList = props => {
     return productsList;
   }
 
+  const createCategoryObject = (catData, products) => { 
+    return {
+      name: catData.name, 
+      hue: catData.hue, 
+      products 
+    }
+  }
+
   const divideProductsList = (categories) => {
-    const tempToBuy = [];
-    const tempWaiting = [];
+    const productsToBuy = [];
+    const productsWaiting = [];
     Object.keys(categories).forEach(category => {
-      const tempProductsToBuy = [];
-      const tempProductsWaiting = [];
-      const categoryData = categories[category];
+      const _ToBuy = [];
+      const _Waiting = [];
+      const catData = categories[category];
       Object.keys(categories[category].products).forEach(prod => {
-        if (parseInt(categoryData.products[prod]) === 1) {
-          tempProductsToBuy.push(prod);
+        if (parseInt(catData.products[prod]) === 1) {
+          _ToBuy.push(prod);
         } else {
-          tempProductsWaiting.push(prod);
+          _Waiting.push(prod);
         }
       });
-      tempToBuy.push({
-        name: category,
-        hue: categoryData.hue,
-        products: tempProductsToBuy
-      });
-      tempWaiting.push({
-        name: category,
-        hue: categoryData.hue,
-        products: tempProductsWaiting
-      });
+      productsToBuy.push(createCategoryObject(catData, _ToBuy));
+      productsWaiting.push(createCategoryObject(catData, _Waiting));
     });
-    return [tempToBuy, tempWaiting];
-  }
+    return [productsToBuy, productsWaiting];
+  };
 
   useEffect(() => {
     const [filteredToBuy, filteredWaiting] = divideProductsList(categories);
@@ -78,11 +78,13 @@ const CategoryList = props => {
   }, [categories]);
   
   return (
-    <StyledCategoryList>
+    <StyledCategoryList baseValue="12">
       <div className="to-buy-list">
+        <div className="list-name">To buy list</div>
         {productsToBuy}
       </div>
       <div className="waiting-list">
+        <div className="list-name">other products</div>
         {productsWaiting}
       </div>
     </StyledCategoryList>

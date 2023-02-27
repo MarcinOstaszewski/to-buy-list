@@ -1,20 +1,30 @@
 import styled from "styled-components";
 
 const StyledCategoryList = styled.main`
-  main {
+  margin: ${props => props.baseValue}px ${props => props.baseValue}px 0;
+
+  .list-name {
     width: 100%;
+    font-size: ${props => props.baseValue * 2}px;
+    margin: 0 0 ${props => props.baseValue / 6}px ${props => props.baseValue * 4}px;
+    font-weight: 600;
+    text-transform: uppercase;
   }
   .to-buy-list,
   .waiting-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
+  }
+  
+  .waiting-list {
+    margin-top: ${props => props.baseValue * 2}px;
+    opacity: .7;
   }
 
   .category,
   .product {
     color: #fff;
-    margin: 3px 1px;
+    margin: ${props => props.baseValue / 4}px 1px;
 	cursor: pointer;
   }
 
@@ -26,6 +36,7 @@ const StyledCategoryList = styled.main`
 
     &.is-empty {
       border-radius: var(--border-radius-when-empty);
+      margin-right: ${props => props.baseValue / 4}px;
     }
   }
 
@@ -33,7 +44,7 @@ const StyledCategoryList = styled.main`
     padding: var(--default-padding);
     &.is-last {
       border-radius: 0 var(--border-radius) var(--border-radius) 0;
-      margin-right: 10px;
+      margin-right: ${props => props.baseValue}px;
     }
   }
 `;
