@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { subscribeToDB } from "../../helpers/firebase";
 import StyledCategoryList from "./CategoryList.styled";
 
 const CategoryList = props => {
-  const { categories, moveProduct } = props;
+  const { categories, moveProduct, onSnapshotChange } = props;
   const [productsToBuy, setProductsToBuy] = useState([]);
   const [productsWaiting , setProductsWaiting] = useState([]);
 
@@ -70,6 +71,8 @@ const CategoryList = props => {
     });
     return [productsToBuy, productsWaiting];
   };
+
+  useEffect(() => { subscribeToDB(onSnapshotChange); }, []);
 
   useEffect(() => {
     const [filteredToBuy, filteredWaiting] = divideProductsList(categories);

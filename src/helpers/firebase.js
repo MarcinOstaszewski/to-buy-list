@@ -8,7 +8,7 @@ const app = initializeApp(config);
 const db = getFirestore();
 const colRef = collection(db, collectionName);
 const docRefs = {};
-const unsubscriptions = {}; 
+const unsubscriptions = {};
 
 const getCategories = async (onSnapshotChange) => {
     const snapshot = await getDocs(colRef);
@@ -18,24 +18,31 @@ const getCategories = async (onSnapshotChange) => {
         const docRef = doc(db, collectionName, document.id);
         const categoryName = document.data().name;
         docRefs[categoryName] = docRef;
-        unsubscriptions[categoryName] = onSnapshot(docRef, docsSnap => {
-            onSnapshotChange(docsSnap);
-        });
         collectionArray.push(document.data());
     });
     return collectionArray;
 }
 
-const reverseProductState = ({category, product, isToBuy}) => { //, getData
+const subscribeToDB = async (onSnapshotChange) => {
+    const snapshot = await getDocs(colRef);
+
+    snapshot.docs.forEach(document => {
+        const docRef = doc(db, collectionName, document.id);
+        const categoryName = document.data().name;
+        docRefs[categoryName] = docRef;
+        unsubscriptions[categoryName] = onSnapshot(docRef, docsSnap => {
+            onSnapshotChange(docsSnap);
+        });
+    });
+}
+
+const reverseProductState = ({category, product, isToBuy}) => {
     const reversedIsToBuy = parseInt(isToBuy) === 0 ? 1 : 0;
     const pathToValue = `products.${product}`;
     const update = {
         [pathToValue]: reversedIsToBuy
     }
     updateDoc(docRefs[category], update)
-    // .then(() => {
-    //     getData();
-    // });
 }
 
 const resetCategoriesArray = async () => {
@@ -57,6 +64,7 @@ export {
     app,
     db,
     getCategories,
+    subscribeToDB,
     reverseProductState,
     resetCategoriesArray,
     queryCategories

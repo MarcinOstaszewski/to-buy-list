@@ -9,14 +9,13 @@ function App() {
     hue?: number,
     products?: {}
   } 
+
   const categoryArray: categoryInterface[] = [];
   const [categories, setCategories] = useState(categoryArray);
+  const getCategoriesData = () => categories;
 
   const onSnapshotChange = (e: any) => {
-    if (!categories.length) {
-      return;
-    }
-
+    const categories = getCategoriesData();
     const changedCategoryName = e.data().name;
     const newCategoriesData: categoryInterface[] = [...categories];
     newCategoriesData.forEach( (category, index) => {
@@ -28,28 +27,25 @@ function App() {
   }
 
   const getData = () => {
-    getCategories(onSnapshotChange)
+    getCategories()
     .then(res => {
       setCategories(res);
-    })
+    });
   }
 
-  useEffect(() => {
-    getData();
-  }, []);
+  useEffect(() => { getData(); }, []);
 
   const moveProduct = (e: React.MouseEventHandler<HTMLSpanElement> | any) => {
-    let {category, product, isToBuy} = e.target.dataset;
-    console.log('moveProduct runs:___', category, product, isToBuy);
-    reverseProductState({category, product, isToBuy});
+    reverseProductState(e.target.dataset);
   }
   
   return (
     <div className="App">
-      <CategoryList 
+      {categories.length && <CategoryList
         categories={categories} 
         moveProduct={moveProduct}
-      />
+        onSnapshotChange={onSnapshotChange}
+      />}
       {/* <button onClick={queryCategories} data-query-text="pasta" data-path="category.name"> Make a query </button> */}
       {/* <button onClick={resetCategoriesArray} data-query="aaa" data-path="capital"> Reset Categories ARRAY </button> */}
     </div>
