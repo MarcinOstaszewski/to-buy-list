@@ -3,7 +3,7 @@ import { subscribeToDB } from "../../helpers/firebase";
 import StyledCategoryList from "./CategoryList.styled";
 
 const CategoryList = props => {
-  const { categories, moveProduct, onSnapshotChange } = props;
+  const { categories, moveProduct, onSnapshotChange, toggleModal, baseValue } = props;
   const [productsToBuy, setProductsToBuy] = useState([]);
   const [productsWaiting , setProductsWaiting] = useState([]);
 
@@ -35,7 +35,9 @@ const CategoryList = props => {
       const categoryProducts = categoryLength ? createProductsList({category, isToBuy, style}) : [];
       productsList.push(
         <span key={i} style={style}
-          className={`category${isCategoryEmpty}`}>
+          className={`category${isCategoryEmpty}`}
+          data-category={category.name}
+          onClick={toggleModal}>
           {category.name.toUpperCase()}
         </span>,
         ...categoryProducts
@@ -81,7 +83,7 @@ const CategoryList = props => {
   }, [categories]);
   
   return (
-    <StyledCategoryList baseValue="12">
+    <StyledCategoryList baseValue={baseValue}>
       <div className="to-buy-list">
         <div className="list-name">To buy list</div>
         {productsToBuy}

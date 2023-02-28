@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
 const StyledCategoryList = styled.main`
-  margin: ${props => props.baseValue}px ${props => props.baseValue}px 0;
-
   .list-name {
     width: 100%;
     font-size: ${props => props.baseValue * 2}px;
@@ -12,12 +10,12 @@ const StyledCategoryList = styled.main`
   }
   .to-buy-list,
   .waiting-list {
+    padding: ${props => props.baseValue}px;
     display: flex;
     flex-wrap: wrap;
   }
   
   .waiting-list {
-    margin-top: ${props => props.baseValue * 2}px;
     opacity: .7;
   }
 
