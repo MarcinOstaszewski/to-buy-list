@@ -3,25 +3,28 @@ import StyledSettingsModal from './SettingsModal.styles';
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
 import InputBox from '../InputBox/InputBox';
 
+type mouseEvent = React.MouseEventHandler<HTMLDivElement> | undefined;
 interface Props {
   isVisible: boolean,
   baseValue: number,
   currentSettingsTab: number,
+  waitingListOpacity: number,
   changeSettingsTab: React.MouseEventHandler<SVGElement> | undefined,
   handleBoxValueChange: 
     React.MouseEventHandler<HTMLButtonElement> | 
     undefined,
-  toggleModal: React.MouseEventHandler<HTMLDivElement> | undefined
+  toggleModal: mouseEvent,
 }
 
 const CategoryModal = (props: Props) => {
   const { 
-    isVisible, 
-    baseValue, 
-    currentSettingsTab, 
-    changeSettingsTab, 
-    toggleModal, 
-    handleBoxValueChange 
+    isVisible,
+    baseValue,
+    currentSettingsTab,
+    waitingListOpacity,
+    changeSettingsTab,
+    toggleModal,
+    handleBoxValueChange
   } = props;
   const className =  isVisible ? " show" : "";
   const tabNamesArray = ['General', 'Category', 'Other'];
@@ -31,16 +34,16 @@ const CategoryModal = (props: Props) => {
       baseValue={baseValue}
       className={className}
       currentSettingsTab={currentSettingsTab} >
-      <div className="category-modal">
-        <div className="category-modal-switch" onClick={toggleModal}>
+      <div className="settings-modal">
+        <div className="settings-modal-switch" onClick={toggleModal}>
           &times;
         </div>
-        <div className="category-modal-body">
-          <div className="category-modal-header">
+        <div className="settings-modal-body">
+          <div className="settings-modal-header">
             {tabNamesArray[currentSettingsTab]} settings
           </div>
 
-          <div className="category-modal-content">
+          <div className="settings-modal-content">
             <div className="horizontal-tabs-container">
               <CgChevronLeft className="chevron left" data-tab-change={-1} onClick={changeSettingsTab}/>
               
@@ -50,6 +53,19 @@ const CategoryModal = (props: Props) => {
                     title="Base font size"
                     change={2}
                     value={baseValue}
+                    minValue={4}
+                    maxValue={48}
+                    setter="base"
+                    baseValue={baseValue}
+                    handleBoxValueChange={handleBoxValueChange}
+                  />
+                  <InputBox 
+                    title="Waiting list opacity"
+                    change={1}
+                    value={waitingListOpacity}
+                    minValue={1}
+                    maxValue={10}
+                    setter="opacity"
                     baseValue={baseValue}
                     handleBoxValueChange={handleBoxValueChange}
                   />
@@ -62,7 +78,7 @@ const CategoryModal = (props: Props) => {
             </div>
           </div>
 
-          <div className="category-modal-footer">
+          <div className="settings-modal-footer">
             <button className="reset-button">
               Reset to defaults
             </button>

@@ -5,35 +5,35 @@ const InputBoxStyled = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        margin-bottom: ${props => props.baseValue}px;
+        margin-bottom: 12px;
         
         &-title {
             width: 38.2%;
             min-width: 200px;
-            font-size: ${props => props.baseValue * 2}px;
-            margin-bottom: ${props => props.baseValue}px;
+            font-size: 24px;
+            margin-bottom: 12px;
         }
         &-controls {
-            margin-bottom: ${props => props.baseValue}px;
+            margin-bottom: 12px;
             display: flex;
             width: 61.8%; 
             align-items: center;
+            justify-content: flex-end;
             &-button {
-                max-width: 19.1%;
                 border: none;
                 background-color: transparent;
-                font-size: ${props => props.baseValue * 3}px;
+                font-size: 36px;
                 margin: 0;
                 display: flex;
             }
             &-field {
                 border: none;
-                border-bottom: 2px solid #666;
-                flex-grow: 3;
-                font-size: ${props => props.baseValue * 2}px;;
-                line-height: ${props => props.baseValue * 4}px;
-                margin: 0 ${props => props.baseValue}px;
-                max-width: 40%;
+                border-bottom: 3px solid #666;
+                font-size: 24px;
+                line-height: 48px;
+                margin: 0 12px;
+                text-align: center;
+                width: 24%;
             }
         }
     }

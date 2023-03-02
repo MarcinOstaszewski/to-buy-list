@@ -22,32 +22,32 @@ const StyledSettingsModal = styled.div`
         transition: all .3s;
     }
 
-    .category-modal {
+    .settings-modal {
         position: relative;
         height: 61.8%;
         width: 61.8%;
         background-color: #ffffffdd;
-        padding: ${props => props.baseValue * 2}px;
+        padding: 24px;
         border: 5px solid #666;
-        border-radius: ${props => props.baseValue / 2}px;
+        border-radius: 6px;
 
         &-switch {
             cursor: pointer;
-            font-size: ${props => props.baseValue * 3}px;
-            line-height: ${props => props.baseValue * 2}px;
-            padding: ${props => props.baseValue / 2}px;
+            font-size: 36px;
+            line-height: 24px;
+            padding: 24px;
             position: absolute;
-            right: ${props => props.baseValue / 2}px;
-            top: ${props => props.baseValue / 2}px;
+            right: 6px;
+            top: 6px;
         }
         &-body {
             height: 100%;
         }
         &-header {
             height: 10%;
-            font-size: ${props => props.baseValue * 2}px;
+            font-size: 32px;
             font-weight: bold;
-            margin-left: ${props => props.baseValue * 3}px;
+            margin-left: 32px;
         }
         &-content {
             height: 80%;
@@ -58,7 +58,7 @@ const StyledSettingsModal = styled.div`
             justify-content: flex-end;
             align-items: center;
             .reset-button {
-                padding: ${props => props.baseValue}px ${props => props.baseValue * 2}px;
+                padding: 12px 24px;
                 background-color: #d40;
                 border-radius: var(--border-radius);
                 border: 0;
@@ -76,7 +76,7 @@ const StyledSettingsModal = styled.div`
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
-                font-size: ${props => props.baseValue * 3}px;
+                font-size: 36px;
                 &.left {
                     left: -6px;
                 }
@@ -94,7 +94,7 @@ const StyledSettingsModal = styled.div`
             transition: all .6s;
             .tab {
                 width: 100%;
-                margin: ${props => props.baseValue * 3}px;
+                margin: 32px;
             }
         }
     }

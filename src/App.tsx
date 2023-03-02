@@ -18,12 +18,12 @@ function App() {
   const categoryArray: categoryInterface[] = [];
   const [categories, setCategories] = useState(categoryArray);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [baseValue, setBaseValue] = useState(12);
+  const [baseValue, setBaseValue] = useState(10);
+  const [waitingListOpacity, setWaitingListOpacity] = useState(7);
   const [currentSettingsTab, setCurrentSettingsTab] = useState(0);
   const settingsTabsCount = 2;
 
   const changeSettingsTab = (e: mouseEvent) => {
-    console.log(currentSettingsTab, e.currentTarget.dataset.tabChange);
     let newValue = currentSettingsTab + parseInt(e.currentTarget.dataset.tabChange);
     if (newValue < 0) {
       newValue = settingsTabsCount;
@@ -54,9 +54,10 @@ function App() {
   useEffect(() => { getData(); }, []);
 
   const toggleModal = (e: mouseEvent) => {
-    console.log(e.target.dataset.category);
     if (e.target.dataset.category) {
       setCurrentSettingsTab(1);
+    } else {
+      setCurrentSettingsTab(0);
     }
     setShowSettingsModal(!showSettingsModal);
   }
@@ -66,10 +67,16 @@ function App() {
   }
 
   const handleBoxValueChange = (e: mouseEvent) => {
-    let newBaseValue = baseValue + parseInt(e.currentTarget.dataset.change);
-    newBaseValue = newBaseValue < 4 ? 4 : newBaseValue;
-    newBaseValue = newBaseValue > 48 ? 48 : newBaseValue;
-    setBaseValue(newBaseValue);
+    const { setter, minValue, maxValue, change, currentValue } = e.currentTarget.dataset;
+    let newValue = +currentValue + +change;
+    newValue = newValue < minValue ? minValue : newValue;
+    newValue = newValue > maxValue ? maxValue : newValue;
+    if (setter === "base") {
+      setBaseValue(newValue);
+    }
+    if (setter === "opacity") {
+      setWaitingListOpacity(newValue);
+    }
   }
 
   return (
@@ -80,15 +87,17 @@ function App() {
         toggleModal={toggleModal}
         onSnapshotChange={onSnapshotChange}
         baseValue={baseValue}
+        waitingListOpacity={waitingListOpacity}
       />)}
 
       <SettingsModal
-          isVisible={showSettingsModal}
-          baseValue={baseValue}
-          currentSettingsTab={currentSettingsTab}
-          changeSettingsTab={changeSettingsTab}
-          toggleModal={toggleModal}
-          handleBoxValueChange={handleBoxValueChange}
+        isVisible={showSettingsModal}
+        baseValue={baseValue}
+        currentSettingsTab={currentSettingsTab}
+        changeSettingsTab={changeSettingsTab}
+        toggleModal={toggleModal}
+        handleBoxValueChange={handleBoxValueChange}
+        waitingListOpacity={waitingListOpacity}
       />
 
       <div className="modal-switch" onClick={toggleModal}><CgMenu/></div>

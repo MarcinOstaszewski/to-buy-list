@@ -2,16 +2,28 @@ import React from 'react';
 import { BsFillPlusCircleFill, BsFillDashCircleFill} from "react-icons/bs";
 import InputBoxStyled from './InputBox.styled';
 
-interface Props {
+interface InputBoxProps {
     title: string,
     baseValue: number,
+    minValue: number,
+    maxValue: number,
+    setter: string,
     value: number,
     change: number,
     handleBoxValueChange: React.MouseEventHandler<HTMLButtonElement> | undefined
 }
 
-const InputBox = (props: Props)  => {
-    const { title, change, baseValue, value, handleBoxValueChange } = props;
+const InputBox = (props: InputBoxProps)  => {
+    const { 
+        title,
+        change,
+        baseValue,
+        minValue,
+        maxValue,
+        setter,
+        value,
+        handleBoxValueChange 
+    } = props;
 
     return (
         <InputBoxStyled baseValue={baseValue}>
@@ -21,16 +33,24 @@ const InputBox = (props: Props)  => {
                     <button 
                         className="input-box-controls-button"
                         data-change={-change}
+                        data-current-value={value}
+                        data-min-value={minValue}
+                        data-max-value={maxValue}
+                        data-setter={setter}
                         onClick={handleBoxValueChange}
                     >
                         <BsFillDashCircleFill />
                     </button>
                     
-                    <p className="input-box-controls-field"> {value} </p>
+                    <p className="input-box-controls-field"> {value * 10}% </p>
                     
                     <button 
                         className="input-box-controls-button"
                         data-change={change}
+                        data-current-value={value}
+                        data-min-value={minValue}
+                        data-max-value={maxValue}
+                        data-setter={setter}
                         onClick={handleBoxValueChange}
                     >
                         <BsFillPlusCircleFill />

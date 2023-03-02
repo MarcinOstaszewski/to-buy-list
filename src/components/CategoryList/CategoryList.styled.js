@@ -16,14 +16,14 @@ const StyledCategoryList = styled.main`
   }
   
   .waiting-list {
-    opacity: .7;
+    opacity: ${props => props.waitingListOpacity / 10};
   }
 
   .category,
   .product {
     color: #fff;
     margin: ${props => props.baseValue / 4}px 1px;
-	cursor: pointer;
+    cursor: pointer;
   }
 
   .category {
