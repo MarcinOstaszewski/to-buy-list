@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCategories, queryCategories, resetCategoriesArray, reverseProductState } from './helpers/firebase';
 import CategoryList from './components/CategoryList/CategoryList';
-import CategoryModal from './components/SettingsModal/SettingsModal';
+import SettingsModal from './components/SettingsModal/SettingsModal';
 import { CgMenu } from "react-icons/cg";
 
 import './App.css';
@@ -19,6 +19,19 @@ function App() {
   const [categories, setCategories] = useState(categoryArray);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [baseValue, setBaseValue] = useState(12);
+  const [currentSettingsTab, setCurrentSettingsTab] = useState(0);
+  const settingsTabsCount = 2;
+
+  const changeSettingsTab = (e: mouseEvent) => {
+    console.log(currentSettingsTab, e.currentTarget.dataset.tabChange);
+    let newValue = currentSettingsTab + parseInt(e.currentTarget.dataset.tabChange);
+    if (newValue < 0) {
+      newValue = settingsTabsCount;
+    } else if (newValue > settingsTabsCount) {
+      newValue = 0;
+    }
+    setCurrentSettingsTab(newValue);
+  }
 
   const onSnapshotChange = (e: any) => {
     const changedCategoryName = e.data().name;
@@ -42,11 +55,21 @@ function App() {
 
   const toggleModal = (e: mouseEvent) => {
     console.log(e.target.dataset.category);
+    if (e.target.dataset.category) {
+      setCurrentSettingsTab(1);
+    }
     setShowSettingsModal(!showSettingsModal);
   }
 
   const moveProduct = (e: mouseEvent) => {
     reverseProductState(e.target.dataset);
+  }
+
+  const handleBoxValueChange = (e: mouseEvent) => {
+    let newBaseValue = baseValue + parseInt(e.currentTarget.dataset.change);
+    newBaseValue = newBaseValue < 4 ? 4 : newBaseValue;
+    newBaseValue = newBaseValue > 48 ? 48 : newBaseValue;
+    setBaseValue(newBaseValue);
   }
 
   return (
@@ -59,10 +82,13 @@ function App() {
         baseValue={baseValue}
       />)}
 
-      <CategoryModal
+      <SettingsModal
           isVisible={showSettingsModal}
           baseValue={baseValue}
+          currentSettingsTab={currentSettingsTab}
+          changeSettingsTab={changeSettingsTab}
           toggleModal={toggleModal}
+          handleBoxValueChange={handleBoxValueChange}
       />
 
       <div className="modal-switch" onClick={toggleModal}><CgMenu/></div>

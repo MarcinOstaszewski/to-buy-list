@@ -1,57 +1,67 @@
-import React, { useState } from 'react';
-import StyledCategoryModal from './SettingsModal.styles';
+import React from 'react';
+import StyledSettingsModal from './SettingsModal.styles';
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
+import InputBox from '../InputBox/InputBox';
 
 interface Props {
   isVisible: boolean,
   baseValue: number,
+  currentSettingsTab: number,
+  changeSettingsTab: React.MouseEventHandler<SVGElement> | undefined,
+  handleBoxValueChange: 
+    React.MouseEventHandler<HTMLButtonElement> | 
+    undefined,
   toggleModal: React.MouseEventHandler<HTMLDivElement> | undefined
 }
 
 const CategoryModal = (props: Props) => {
-  type mouseEvent = React.MouseEventHandler<HTMLSpanElement> | any;
-
-  const tabsCount = 2;
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const changeTab = (e: mouseEvent) => {
-    console.log(currentTab, e.currentTarget.dataset.tabChange);
-    let newCurrentTab = currentTab + parseInt(e.currentTarget.dataset.tabChange);
-    if (newCurrentTab < 0) {
-      newCurrentTab = tabsCount;
-    } else if (newCurrentTab > tabsCount) {
-      newCurrentTab = 0;
-    }
-    setCurrentTab(newCurrentTab);
-  }
-
-  const { isVisible, baseValue, toggleModal } = props;
+  const { 
+    isVisible, 
+    baseValue, 
+    currentSettingsTab, 
+    changeSettingsTab, 
+    toggleModal, 
+    handleBoxValueChange 
+  } = props;
   const className =  isVisible ? " show" : "";
+  const tabNamesArray = ['General', 'Category', 'Other'];
 
   return (
-    <StyledCategoryModal 
-      baseValue={baseValue} 
-      className={className} 
-      currentTab={currentTab} >
+    <StyledSettingsModal 
+      baseValue={baseValue}
+      className={className}
+      currentSettingsTab={currentSettingsTab} >
       <div className="category-modal">
-        <div className="category-modal-switch" onClick={props.toggleModal}>
+        <div className="category-modal-switch" onClick={toggleModal}>
           &times;
         </div>
         <div className="category-modal-body">
           <div className="category-modal-header">
-            Settings
+            {tabNamesArray[currentSettingsTab]} settings
           </div>
+
           <div className="category-modal-content">
             <div className="horizontal-tabs-container">
-              <CgChevronLeft className="chevron left" data-tab-change="-1" onClick={changeTab}/>
+              <CgChevronLeft className="chevron left" data-tab-change={-1} onClick={changeSettingsTab}/>
+              
               <div className="horizontal-tabs-content">
-                <div className="tab">General</div>
+                <div className="tab">
+                  <InputBox 
+                    title="Base font size"
+                    change={2}
+                    value={baseValue}
+                    baseValue={baseValue}
+                    handleBoxValueChange={handleBoxValueChange}
+                  />
+                </div>
                 <div className="tab">Category</div>
-                <div className="tab">? ? ?</div>
+                <div className="tab">Other</div>
               </div>
-              <CgChevronRight className="chevron right" data-tab-change="1" onClick={changeTab}/>
+
+              <CgChevronRight className="chevron right" data-tab-change={1} onClick={changeSettingsTab}/>
             </div>
           </div>
+
           <div className="category-modal-footer">
             <button className="reset-button">
               Reset to defaults
@@ -59,7 +69,7 @@ const CategoryModal = (props: Props) => {
           </div>
         </div>
       </div>
-    </StyledCategoryModal>
+    </StyledSettingsModal>
   )
 }
 

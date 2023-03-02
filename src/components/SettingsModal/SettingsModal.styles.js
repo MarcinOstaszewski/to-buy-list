@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledCategoryModal = styled.div`
+const StyledSettingsModal = styled.div`
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -24,8 +24,8 @@ const StyledCategoryModal = styled.div`
 
     .category-modal {
         position: relative;
-        height: 61%;
-        width: 61%;
+        height: 61.8%;
+        width: 61.8%;
         background-color: #ffffffdd;
         padding: ${props => props.baseValue * 2}px;
         border: 5px solid #666;
@@ -47,6 +47,7 @@ const StyledCategoryModal = styled.div`
             height: 10%;
             font-size: ${props => props.baseValue * 2}px;
             font-weight: bold;
+            margin-left: ${props => props.baseValue * 3}px;
         }
         &-content {
             height: 80%;
@@ -89,14 +90,14 @@ const StyledCategoryModal = styled.div`
             width: 300%;
             height: 100%;
             display: flex;
-            margin-left: -${props => props.currentTab * 100}%;
+            margin-left: -${props => props.currentSettingsTab * 100}%;
             transition: all .6s;
             .tab {
                 width: 100%;
-                padding: ${props => props.baseValue * 2}px;
+                margin: ${props => props.baseValue * 3}px;
             }
         }
     }
 `;
 
-export default StyledCategoryModal;
+export default StyledSettingsModal;
