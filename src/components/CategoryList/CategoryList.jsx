@@ -38,6 +38,7 @@ const CategoryList = props => {
 				<span key={i} style={style}
 					className={`category${isCategoryEmpty}`}
 					data-category={category.name}
+					data-category-index={i}
 					onClick={toggleModal}>
 					{category.name.toUpperCase()}
 				</span>,

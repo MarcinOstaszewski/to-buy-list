@@ -2,18 +2,20 @@ import React from 'react';
 import StyledSettingsModal from './SettingsModal.styles';
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
 import InputBox from '../InputBox/InputBox';
+import { categoryInterface, inputChangeHandler, mouseEventButton, mouseEventDiv, mouseEventSVG } from "../../helpers/typesAndInterfaces";
+import EditCategoryTab from './EditCategoryTab/EditCategoryTab';
 
-type mouseEvent = React.MouseEventHandler<HTMLDivElement> | undefined;
 interface Props {
   isVisible: boolean,
   baseValue: number,
   currentSettingsTab: number,
   waitingListOpacity: number,
-  changeSettingsTab: React.MouseEventHandler<SVGElement> | undefined,
-  handleBoxValueChange: 
-    React.MouseEventHandler<HTMLButtonElement> | 
-    undefined,
-  toggleModal: mouseEvent,
+  changeSettingsTab: mouseEventSVG,
+  handleBoxValueChange: mouseEventButton,
+  toggleModal: mouseEventDiv,
+  categories: categoryInterface[]
+  chosenCategoryIndex: number,
+  handleValueChange: inputChangeHandler
 }
 
 const CategoryModal = (props: Props) => {
@@ -24,7 +26,10 @@ const CategoryModal = (props: Props) => {
     waitingListOpacity,
     changeSettingsTab,
     toggleModal,
-    handleBoxValueChange
+    handleBoxValueChange,
+    categories,
+    chosenCategoryIndex,
+    handleValueChange
   } = props;
   const className =  isVisible ? " show" : "";
   const tabNamesArray = ['General', 'Category', 'Other'];
@@ -70,7 +75,14 @@ const CategoryModal = (props: Props) => {
                     handleBoxValueChange={handleBoxValueChange}
                   />
                 </div>
-                <div className="tab">Category</div>
+
+                <div className="tab">
+                  <EditCategoryTab
+                    index={chosenCategoryIndex}
+                    categories={categories}
+                    handleValueChange={handleValueChange} />
+                </div>
+
                 <div className="tab">Other</div>
               </div>
 

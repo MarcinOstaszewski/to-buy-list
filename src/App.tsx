@@ -3,17 +3,11 @@ import { getCategories, queryCategories, resetCategoriesArray, reverseProductSta
 import CategoryList from './components/CategoryList/CategoryList';
 import SettingsModal from './components/SettingsModal/SettingsModal';
 import { CgMenu } from "react-icons/cg";
+import { categoryInterface, inputChangeEvent, mouseEventSpan } from './helpers/typesAndInterfaces';
 
 import './App.css';
 
 function App() {
-  interface categoryInterface {
-    name?: string,
-    hue?: number,
-    products?: {}
-  }
-
-  type mouseEvent = React.MouseEventHandler<HTMLSpanElement> | any;
 
   const categoryArray: categoryInterface[] = [];
   const [categories, setCategories] = useState(categoryArray);
@@ -21,9 +15,10 @@ function App() {
   const [baseValue, setBaseValue] = useState(10);
   const [waitingListOpacity, setWaitingListOpacity] = useState(7);
   const [currentSettingsTab, setCurrentSettingsTab] = useState(0);
+  const [chosenCategoryIndex, setChosenCategoryIndex] = useState(-1);
   const settingsTabsCount = 2;
 
-  const changeSettingsTab = (e: mouseEvent) => {
+  const changeSettingsTab = (e: mouseEventSpan) => {
     let newValue = currentSettingsTab + parseInt(e.currentTarget.dataset.tabChange);
     if (newValue < 0) {
       newValue = settingsTabsCount;
@@ -53,8 +48,10 @@ function App() {
 
   useEffect(() => { getData(); }, []);
 
-  const toggleModal = (e: mouseEvent) => {
-    if (e.target.dataset.category) {
+  const toggleModal = (e: mouseEventSpan) => {
+    const categoryIndex = e.target.dataset.categoryIndex;
+    if (categoryIndex) {
+      setChosenCategoryIndex(categoryIndex);
       setCurrentSettingsTab(1);
     } else {
       setCurrentSettingsTab(0);
@@ -62,11 +59,11 @@ function App() {
     setShowSettingsModal(!showSettingsModal);
   }
 
-  const moveProduct = (e: mouseEvent) => {
+  const moveProduct = (e: mouseEventSpan) => {
     reverseProductState(e.target.dataset);
   }
 
-  const handleBoxValueChange = (e: mouseEvent) => {
+  const handleBoxValueChange = (e: mouseEventSpan) => {
     const { setter, minValue, maxValue, change, currentValue } = e.currentTarget.dataset;
     let newValue = +currentValue + +change;
     newValue = newValue < minValue ? minValue : newValue;
@@ -77,6 +74,10 @@ function App() {
     if (setter === "opacity") {
       setWaitingListOpacity(newValue);
     }
+  }
+
+  const handleValueChange = (e: inputChangeEvent) => {
+    console.log(e);
   }
 
   return (
@@ -98,6 +99,9 @@ function App() {
         toggleModal={toggleModal}
         handleBoxValueChange={handleBoxValueChange}
         waitingListOpacity={waitingListOpacity}
+        categories={categories}
+        chosenCategoryIndex={chosenCategoryIndex}
+        handleValueChange={handleValueChange}
       />
 
       <div className="modal-switch" onClick={toggleModal}><CgMenu/></div>
